@@ -49,32 +49,9 @@ namespace TesteMaster.Application.Services
             var rotas = await _rotaRepository.GetAllAsync();
             var viagens = new List<Viagem>();
 
-            void BuscarCaminhosPossiveis(string inicio, string fim, List<Rota> caminho, decimal custo)
-            {
-                if (inicio == fim)
-                {
-                    viagens.Add(new Viagem
-                    {
-                        Rotas = new List<Rota>(caminho),
-                        ValorTotal = custo
-                    });
-                    return;
-                }
+            BuscarCaminhosPossiveis(rotas, origem, destino, new List<Rota>(), 0, viagens);
 
-                foreach (var rota in rotas.Where(r => r.Origem.Sigla == inicio))
-                {
-                    if (caminho.Any(p => p.Origem == rota.Origem && p.Destino == rota.Destino))
-                        continue; 
-
-                    caminho.Add(rota);
-                    BuscarCaminhosPossiveis(rota.Destino.Sigla, fim, caminho, custo + rota.Valor);
-                    caminho.RemoveAt(caminho.Count - 1);
-                }
-            }
-
-            BuscarCaminhosPossiveis(origem, destino, new List<Rota>(), 0);
-
-            return viagens.OrderByDescending(x => x.ValorTotal);
+            return viagens.OrderBy(x => x.ValorTotal);
         }
 
         public async Task<Viagem> GetViagemMenorValorAsync(string origem, string destino)
@@ -82,32 +59,33 @@ namespace TesteMaster.Application.Services
             var rotas = await _rotaRepository.GetAllAsync();
             var viagens = new List<Viagem>();
 
-            void BuscarCaminhosPossiveis(string inicio, string fim, List<Rota> caminho, decimal custo)
+            BuscarCaminhosPossiveis(rotas, origem, destino, new List<Rota>(), 0, viagens);
+
+            var viagem = viagens.OrderBy(x => x.ValorTotal).FirstOrDefault();
+            return viagem;
+        }
+
+        private void BuscarCaminhosPossiveis(IEnumerable<Rota> rotas, string inicio, string fim, List<Rota> caminho, decimal custo, List<Viagem> viagens)
+        {
+            if (inicio == fim)
             {
-                if (inicio == fim)
+                viagens.Add(new Viagem
                 {
-                    viagens.Add(new Viagem
-                    {
-                        Rotas = new List<Rota>(caminho),
-                        ValorTotal = custo
-                    });
-                    return;
-                }
-
-                foreach (var rota in rotas.Where(r => r.Origem.Sigla == inicio))
-                {
-                    if (caminho.Any(p => p.Origem == rota.Origem && p.Destino == rota.Destino))
-                        continue;
-
-                    caminho.Add(rota);
-                    BuscarCaminhosPossiveis(rota.Destino.Sigla, fim, caminho, custo + rota.Valor);
-                    caminho.RemoveAt(caminho.Count - 1);
-                }
+                    Rotas = new List<Rota>(caminho),
+                    ValorTotal = custo
+                });
+                return;
             }
 
-            BuscarCaminhosPossiveis(origem, destino, new List<Rota>(), 0);
-            var viagem = viagens.OrderByDescending(x => x.ValorTotal).FirstOrDefault();
-            return viagem;
+            foreach (var rota in rotas.Where(r => r.Origem.Sigla == inicio))
+            {
+                if (caminho.Any(p => p.Origem == rota.Origem && p.Destino == rota.Destino))
+                    continue;
+
+                caminho.Add(rota);
+                BuscarCaminhosPossiveis(rotas, rota.Destino.Sigla, fim, caminho, custo + rota.Valor, viagens);
+                caminho.RemoveAt(caminho.Count - 1);
+            }
         }
     }
 }
