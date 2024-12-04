@@ -1,0 +1,155 @@
+@baseUrl = https://localhost:44353
+
+# ViagemController
+
+# Get all viagens
+GET {{baseUrl}}/api/viagem
+Accept: application/json
+
+###
+
+# Get viagem by id
+GET {{baseUrl}}/api/viagem/1
+Accept: application/json
+
+###
+
+# Add a new viagem
+POST {{baseUrl}}/api/viagem
+Content-Type: application/json
+
+{
+  "rotas": [
+    {
+      "origem": {
+        "sigla": "ORIG"
+      },
+      "destino": {
+        "sigla": "DEST"
+      },
+      "valor": 100.0
+    }
+  ],
+  "valorTotal": 100.0
+}
+
+###
+
+# Update an existing viagem
+PUT {{baseUrl}}/api/viagem/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "rotas": [
+    {
+      "origem": {
+        "sigla": "ORIG"
+      },
+      "destino": {
+        "sigla": "DEST"
+      },
+      "valor": 150.0
+    }
+  ],
+  "valorTotal": 150.0
+}
+
+###
+
+# Delete a viagem
+DELETE {{baseUrl}}/api/viagem/1
+Accept: application/json
+
+###
+
+# Listar viagens possíveis
+GET {{baseUrl}}/api/viagem/ListarViagensPossiveis?origem=ORIG&destino=DEST
+Accept: application/json
+
+###
+
+# Listar viagem de menor valor
+GET {{baseUrl}}/api/viagem/ListarViagensMenorValor?origem=ORIG&destino=DEST
+Accept: application/json
+
+### LocalizacaoController
+
+# Get all localizacoes
+GET {{baseUrl}}/api/localizacao
+Accept: application/json
+
+###
+
+# Get localizacao by id
+GET {{baseUrl}}/api/localizacao/1
+Accept: application/json
+
+###
+
+# Add a new localizacao
+POST {{baseUrl}}/api/localizacao
+Content-Type: application/json
+
+{
+  "nome": "LocalizacaoExemplo"
+}
+
+###
+
+# Update an existing localizacao
+PUT {{baseUrl}}/api/localizacao/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "nome": "LocalizacaoAtualizada"
+}
+
+###
+
+# Delete a localizacao
+DELETE {{baseUrl}}/api/localizacao/1
+Accept: application/json
+
+# Get all rotas
+GET {{baseUrl}}/api/rota
+Accept: application/json
+
+###
+
+### Get rota by id
+GET {{baseUrl}}/api/rota/1
+Accept: application/json
+
+###
+
+### Add a new rota
+POST {{baseUrl}}/api/rota
+Content-Type: application/json
+
+{
+  "origem": "OrigemExemplo",
+  "destino": "DestinoExemplo",
+  "valor": 100.0
+}
+
+###
+
+### Update an existing rota
+PUT {{baseUrl}}/api/rota/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "origem": "OrigemAtualizada",
+  "destino": "DestinoAtualizado",
+  "valor": 150.0
+}
+
+###
+
+### Delete a rota
+DELETE {{baseUrl}}/api/rota/1
+Accept: application/json
+
