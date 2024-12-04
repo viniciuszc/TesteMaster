@@ -14,7 +14,16 @@ namespace TesteMaster.Application
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
-            
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularApp",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200")
+                               .AllowAnyHeader()
+                               .AllowAnyMethod();
+                    });
+            });
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -35,6 +44,7 @@ namespace TesteMaster.Application
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("AllowAngularApp");
             app.UseAuthorization();
             app.MapControllers();
             app.Run();

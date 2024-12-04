@@ -36,6 +36,8 @@ namespace TesteMaster.API.Controllers
         [HttpPost]
         public async Task<ActionResult> Add(Viagem viagem)
         {
+            viagem.Id = 0;
+
             await _service.AddAsync(viagem);
             return CreatedAtAction(nameof(GetById), new { id = viagem.Id }, viagem);
         }

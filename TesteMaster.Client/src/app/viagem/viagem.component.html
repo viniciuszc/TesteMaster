@@ -1,0 +1,36 @@
+<div class="container text-center mt-5">
+  <h1>Viagem</h1>
+  <div class="row justify-content-center mt-4">
+    <div class="col-md-4">
+      <label for="origem">Origem:</label>
+      <select id="origem" class="form-control" [(ngModel)]="origem">
+        <option *ngFor="let localizacao of localizacoes" [value]="localizacao.sigla">{{ localizacao.sigla }}</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label for="destino">Destino:</label>
+      <select id="destino" class="form-control" [(ngModel)]="destino">
+        <option *ngFor="let localizacao of localizacoes" [value]="localizacao.sigla">{{ localizacao.sigla }}</option>
+      </select>
+    </div>
+  </div>
+  <button class="btn btn-primary mt-4" (click)="selecionarMelhorRota()">Selecionar melhor rota</button>
+  <div class="mt-4">
+    <h2>Rotas Disponíveis</h2>
+    <ul class="list-group">
+      <li *ngFor="let viagem of viagens; let i = index" class="list-group-item row justify-content-center mt-1">
+        <div *ngFor="let rota of viagem.rotas">
+          Origem: {{ rota.origem.sigla }} - Destino: {{ rota.destino.sigla }} - Valor: {{ rota.valor }}
+        </div>
+        <div>
+          Valor Total: {{ viagem.valorTotal }}
+        </div>
+        <div>
+          <button class="btn" [ngClass]="i === 0 ? 'btn-success mt-4' : 'btn-primary mt-4'" (click)="salvarViagem(viagem)">
+            {{ i === 0 ? 'Melhor Valor' : 'Selecionar' }}
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
